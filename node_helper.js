@@ -6,11 +6,11 @@ module.exports = NodeHelper.create({
     discovery: null,
     asyncDevice: null,
 
-    init: function() {
+    init: function () {
         this.discovery = new AsyncDeviceDiscovery();
     },
 
-    stop: function() {
+    stop: function () {
         if (listener.isListening()) {
             listener.stopListener().then(() => {
                 console.debug('Stopped all listeners to Sonos devices');
@@ -31,7 +31,7 @@ module.exports = NodeHelper.create({
         }
     },
 
-    discoverGroups: function(attempts = 0) {
+    discoverGroups: function (attempts = 0) {
         if (!this.asyncDevice) {
             this.asyncDevice = this.discovery.discover().then(device => {
                 listener.on('ZonesChanged', () => {
@@ -94,7 +94,7 @@ module.exports = NodeHelper.create({
         });
     },
 
-    setListeners: function(groups) {
+    setListeners: function (groups) {
         groups.forEach(group => {
             console.log(`Registering listeners for group "${group.Name}" (host "${group.host}")`);
 
