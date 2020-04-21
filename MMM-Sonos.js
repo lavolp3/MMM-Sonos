@@ -98,6 +98,9 @@ Module.register('MMM-Sonos', {
                 track.className = 'track';
                 track.innerHTML  = `<strong class="bright ticker">${item.track.title}</strong>`;
                 container.append(track);
+                track.className = 'track marquee';
+                track.innerHTML = `<span><strong class="bright">${item.track.title}</strong></span>`;
+                track.firstChild.style.animationDuration = track.innerHTML.length / 6 + "s";
 
                 const artist = [];
                 if (this.config.showArtist && item.track.artist) {
@@ -111,6 +114,8 @@ Module.register('MMM-Sonos', {
                     artistElement.className = 'artist small ticker';
                     artistElement.innerHTML = artist.join('&nbsp;○&nbsp;');
                     container.append(artistElement);
+                    artistElement.className = 'artist small marquee';
+                    artistElement.innerHTML = '<span>' + artist.join('&nbsp;○&nbsp;') + '</span>';
                 }
 
                 if (this.config.showMetadata) {
