@@ -4,7 +4,8 @@ Module.register('MMM-Sonos', {
         showFullGroupName: false,
         showArtist: true,
         showAlbum: true,
-        showMetadata: true
+        showMetadata: true,
+        showAlbumCover: true
     },
 
     items: {},
@@ -93,14 +94,24 @@ Module.register('MMM-Sonos', {
             .filter(item => item.state === 'playing' && item.track)
             .map(item => {
                 const container = document.createElement('div');
+                const textContainer = document.createElement('div');
+
+                if (this.config.showAlbumCover) {
+                    const albumCover = document.createElement('div');
+                    albumCover.className = this.data.position.endsWith('right') ? 'albumcover cover-right' : 'albumcover cover-left';
+                    if (item.track.albumArtURI !== null && item.track.albumArtURI !== undefined && item.track.albumArtURI.trim() !== "") {
+                        albumCover.innerHTML = `<img src="${item.track.albumArtURI}" width="80" height="80">`;
+                    }
+                    container.append(albumCover);
+
+                    textContainer.className = this.data.position.endsWith('right') ? 'sonos-info-margin-right' : 'sonos-info-margin-left';
+                }
 
                 const track = document.createElement('div');
-                track.className = 'track';
-                track.innerHTML  = `<strong class="bright ticker">${item.track.title}</strong>`;
-                container.append(track);
                 track.className = 'track marquee';
                 track.innerHTML = `<span><strong class="bright">${item.track.title}</strong></span>`;
                 track.firstChild.style.animationDuration = track.innerHTML.length / 6 + "s";
+                textContainer.append(track);
 
                 const artist = [];
                 if (this.config.showArtist && item.track.artist) {
@@ -111,11 +122,9 @@ Module.register('MMM-Sonos', {
                 }
                 if (artist.length > 0) {
                     const artistElement = document.createElement('div');
-                    artistElement.className = 'artist small ticker';
-                    artistElement.innerHTML = artist.join('&nbsp;○&nbsp;');
-                    container.append(artistElement);
                     artistElement.className = 'artist small marquee';
                     artistElement.innerHTML = '<span>' + artist.join('&nbsp;○&nbsp;') + '</span>';
+                    textContainer.append(artistElement);
                 }
 
                 if (this.config.showMetadata) {
@@ -138,9 +147,13 @@ Module.register('MMM-Sonos', {
                         `<span>${volume}</span>` +
                         '&nbsp;' +
                         `<span>${this.getIcon('activity', 'dimmed')}&nbsp;<span>${Math.floor(item.track.duration / 60)}:${Math.ceil(item.track.duration % 60).toString().padStart(2, '0')}</span></span>`;
-                    container.append(metadata);
+                    textContainer.append(metadata);
                 }
 
+                container.append(textContainer);
+                const clearContainer = document.createElement('div');
+                clearContainer.style = 'clear:both;';
+                container.append(clearContainer);
 
                 return container;
             }));

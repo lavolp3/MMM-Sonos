@@ -36,6 +36,27 @@
     fill: none;
 }
 
+.albumcover {
+    width: 90px;
+    padding: 5px;
+}
+
+.cover-left {
+    float: left;
+}
+
+.cover-right {
+    float: right;
+}
+
+.sonos-info-margin-right {
+    margin-right: 100px;
+}
+
+.sonos-info-margin-left {
+    margin-left: 100px;
+}
+
 .marquee {
     max-width: 100vw;
     white-space: nowrap;
