@@ -5,13 +5,14 @@ Module.register('MMM-Sonos', {
         showArtist: true,
         showAlbum: true,
         showMetadata: true,
-        showAlbumCover: true
+        showAlbumCover: true,
+        debug: false
     },
 
     items: {},
 
     start: function () {
-        Log.log('Sonos frontend started');
+        this.log('Sonos frontend started');
         this.sendSocketNotification('SONOS_START');
     },
 
@@ -24,7 +25,7 @@ Module.register('MMM-Sonos', {
     },
 
     socketNotificationReceived: function (id, payload) {
-        Log.log(`Notification received: ${id}`, payload);
+        this.log(`Notification received: ${id}`, payload);
 
         switch (id) {
             case 'SET_SONOS_GROUPS':
@@ -163,5 +164,11 @@ Module.register('MMM-Sonos', {
 
     getIcon: function (iconId, classes) {
         return `<svg class="feather ${classes}"><use xlink:href="${this.file('node_modules/feather-icons/dist/feather-sprite.svg')}#${iconId}"/></svg>`;
-    }
+    },
+    
+    log: function (msg) {
+        if (this.config && this.config.debug) {
+            console.log(this.name + ": ", (msg));
+        }
+    },
 });
